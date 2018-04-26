@@ -1,7 +1,3 @@
-
-console.log("OK");
-
-
 function checkLogin(){
     
     console.log("Fonction active");
@@ -9,14 +5,15 @@ function checkLogin(){
     var testLogin = $("#username").val();
     var testPwd = $("#password").val();
     
-        var testUser = {
-                username: testLogin,
-                password: testPwd
-        };
+    var testUser = {
+        username: testLogin,
+        password: testPwd
+    };
         
+    console.log(testUser);
     $.ajax({
         type:"POST",
-        url:"https://whispering-anchorage-52809.herokuapp.com/verify/",
+        url:"https://whispering-anchorage-52809.herokuapp.com/verify",
         data: testUser,
         
         statusCode: {
@@ -28,5 +25,5 @@ function checkLogin(){
                     }
                 }
     });
-}
+};
 

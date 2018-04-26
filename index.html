@@ -1,52 +1,83 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Restologue</title>
-        <meta charset="UTF-8">
-        <link rel="icon" type="image/png" href="favicon.png" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-        <script>
+<head>
+    <title>Restologue</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <link href="./css/backStyle.css" rel="stylesheet">
+    <script>
 
-            $.ajax({
-                type: "GET",
-                url: "https://whispering-anchorage-52809.herokuapp.com/connected",
-                statusCode: {
-                    200: function () {
-                    },
-                    401: function () {
-                        window.location.href = "./connexion.html";
-                    }
+        $.ajax({
+            type: "GET",
+            url: "https://whispering-anchorage-52809.herokuapp.com/connected",
+            statusCode: {
+                200: function () {
+                },
+                401: function () {
+                    window.location.href = "./connexion.html";
                 }
-            });
-        </script>
+            }
+        });
+    </script>
+</head>
 
-        <script>
+<body>
+    <div class="container-fluid">
+        <div class="row head">
+            <h2>Administration</h2>
+        </div>
+        <div class="row corps">
+            <div class="col-2 gauche">
+                <h4>Liste des cartes</h4>
+            </div>
+            <div class="col-10 droite">
 
-            $.ajax({
-                type: "GET",
-                url: "https://whispering-anchorage-52809.herokuapp.com/connected",
-                statusCode: {
-                    200: function () {
-                    },
-                    401: function () {
-                        window.location.href = "./connexion.html";
-                    }
-                }
-            });
-        </script>
-    </head>
-    <body>
-        <div class="container">
-            <div class="row">
-
+                <div class="row infosCarte">
+                    <div class="col-4">
+                        <h4>Infos carte</h4>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">@</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-8">
+                            <h4>Liste des menus</h4>
+                    </div>
+                </div>
+                <div class="row infosCarte">
+                        <table class="table">
+                                <thead class="thead-dark">
+                                  <tr>
+                                  
+                                    <th scope="col">Menu</th>
+                                    <th scope="col">Entrée</th>
+                                    <th scope="col">Prix</th>
+                                    <th scope="col">Plat</th>
+                                    <th scope="col">Prix</th>
+                                    <th scope="col">Dessert</th>
+                                    <th scope="col">Prix</th>
+                                    <th>Modifier</th>
+                                    <th>Supprimer</th>
+                                    <th>Ajouter</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="ligneMenu">
+                                  </tbody>
+                              </table>
+                </div>
             </div>
         </div>
-    </body>
-        
-    
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    </div>
+</body>
+
+
 </html>
