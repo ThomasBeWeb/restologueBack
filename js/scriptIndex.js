@@ -1,6 +1,6 @@
 $(document).ready(function () {
     showCartes();
-    //showAllMenus();
+    showAllMenus();
 
 });
 
@@ -37,7 +37,7 @@ function showCartes() {
     }
 }
 
-// Ajouter une carte et relancer la fonction showCartes()
+// Ajouter une carte et relancer la fonction showCartes() + affichage de la carte à droite
 function addCarte() {
 
     var newName = $("#nouveauNomCarte").val();
@@ -48,8 +48,9 @@ function addCarte() {
             type: "GET",
             url: "https://whispering-anchorage-52809.herokuapp.com/cartes/add/" + newName,
             async: false,
-            success: function () {
+            success: function (data) {
                 showCartes();
+                showMeACard(data.id);
                 $("#nouveauNomCarte").val("");
             },
             error: function () {
@@ -109,3 +110,41 @@ function showMeACard(idCarte) {
         }
     }
 };
+
+// requete pour afficher Tous les menus disponibles dans table du bas
+
+function showAllMenus() {
+
+    var listeMenus;
+
+    $.ajax({
+        type: "GET",
+        url: "https://whispering-anchorage-52809.herokuapp.com/menus/get",
+        async: false,
+        success: function (data) {
+            listeMenus = data;
+        },
+        error: function () {
+            alert("Erreur dans la récupération des menus");
+        }
+    });
+
+    $("#ligneMenu").empty();
+
+    for (var i = 0; i < listeMenus.length; i++) {
+        $("#ligneMenu").append($("<tr>")
+            .append($("<td>").text(listeMenus[i].nom))
+            .append($("<td>").text(listeMenus[i].entree.nom))
+            .append($("<td>").text(listeMenus[i].plat.nom))
+            .append($("<td>").text(listeMenus[i].dessert.nom))
+            .append($("<td>")
+                    .append($("<button>")
+                            .addClass("btn btn-danger")
+                            .attr("type", "button")
+                            .text("Supprimer")
+                            .attr("onclick", "") //AJOUTER FONCTION
+                            )
+                    )
+            );
+    }
+}

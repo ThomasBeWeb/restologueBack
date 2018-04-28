@@ -1,105 +1,116 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <title>Restologue</title>
-        <meta charset="UTF-8">
-        <link rel="icon" type="image/png" href="favicon.png" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-        <link href="./css/backStyle.css" rel="stylesheet">
-        <script>
+<head>
+    <title>Restologue</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <link href="./css/backStyle.css" rel="stylesheet">
+    <script>
 
-            $.ajax({
-                type: "GET",
-                url: "https://whispering-anchorage-52809.herokuapp.com/connected",
-                statusCode: {
-                    200: function () {
-                    },
-                    401: function () {
-                        window.location.href = "./connexion.html";
-                    }
+        $.ajax({
+            type: "GET",
+            url: "https://whispering-anchorage-52809.herokuapp.com/connected",
+            statusCode: {
+                200: function () {
+                },
+                401: function () {
+                    window.location.href = "./connexion.html";
                 }
-            });
-        </script>
-    </head>
+            }
+        });
+    </script>
+</head>
 
-    <body>
-        <div class="container-fluid">
-            <div class="row head">
-                <h2>Administration</h2>
+<body>
+    <div class="container-fluid">
+        <div class="row head">
+            <h2>Administration</h2>
+        </div>
+        <div class="row corps">
+
+            <!-- ZONE DE GAUCHE: CARTES -->
+            <div class="col-3 gauche">
+                <h4>Liste des cartes</h4>
+
+                <!-- Zone d'ajout d'une carte -->
+                <div>
+                    <h5>Créer une carte</h5>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Nom</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Nom de la carte" aria-label="cardName" aria-describedby="cardName" id="nouveauNomCarte">
+                        <button type="button" class="btn btn-success" onclick="addCarte();">
+                            <b>+</b>
+                        </button>
+                    </div>
+                </div>
+                 <!-- Zone affichage de toutes les cartes créées -->
+                <div id="listeCartes"></div>
             </div>
-            <div class="row corps">
 
-                <!-- LISTE DES CARTES -->
-                <div class="col-3 gauche">
-                    <h4>Liste des cartes</h4>
+             <!-- ZONE DE DROITE -->
+            <div class="col-9 droite">
+                <!-- Zone affichage carte en cours -->
+                <div class="row infosCarte">
+                    <div class="col-4">
 
-                    <!-- Zone d'ajout d'une carte -->
-                    <div>
-                        <h5>Créer une carte</h5>
+                        <h4>Infos carte</h4>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">Nom</span>
+                                <span class="input-group-text">Nom</span>
                             </div>
-                            <input type="text" class="form-control" placeholder="Nom de la carte" aria-label="cardName" aria-describedby="cardName" id="nouveauNomCarte">
-                            <button type="button" class="btn btn-success" onclick="addCarte();"><b>+</b></button>
+                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="nomCarteEdit">
                         </div>
+                        <br>
+                        <h5>Supprimer définitivement la carte</h5>
+                        <button type="button" class="btn btn-outline-danger btn-sm">Supprimer</button>
                     </div>
 
+                    <!-- Zone affichage des menus de la carte sélectionnée -->
+                    <div class="col-8">
+                        <h4>Liste des menus</h4>
 
-                    <div id="listeCartes"></div>
-                </div>
-                <div class="col-9 droite">
-
-                    <div class="row infosCarte">
-                        <div class="col-4">
-                            <h4>Infos carte</h4>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" >Nom</span>
-                                </div>
-                                <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="nomCarteEdit">
-                            </div>
-                        </div>
-                        <div class="col-8">
-                            <h4>Liste des menus</h4>
-
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Menu</th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="listeMenusCarte">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row infosCarte">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">Menu</th>
-                                    <th scope="col">Entrée</th>
-                                    <th scope="col">Plat</th>
-                                    <th scope="col">Dessert</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="ligneMenu">
+                            <tbody id="listeMenusCarte">
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
 
+                <!-- Zone affichage de tous les menus -->
+                <div class="row listeMenus">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Menu</th>
+                                <th scope="col">Entrée</th>
+                                <th scope="col">Plat</th>
+                                <th scope="col">Dessert</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ligneMenu">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </body>
-    <script src="./js/scriptIndex.js" type="text/javascript"></script>
+
+    </div>
+</body>
+<script src="./js/scriptIndex.js" type="text/javascript"></script>
 
 </html>
