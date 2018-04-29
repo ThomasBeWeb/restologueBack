@@ -120,8 +120,6 @@ function retireMenu(idMenu){
     //Recup de l'id de la carte en cours
     var idCarteEnCours = $("#stockIDCarte").val();
 
-    console.log(idCarteEnCours);
-
     $.ajax({
         type: "GET",
         url: "https://whispering-anchorage-52809.herokuapp.com/cartes/" + idCarteEnCours + "/remove/" + idMenu,
@@ -133,8 +131,34 @@ function retireMenu(idMenu){
             alert("Impossible de retirer ce menu de la carte");
         }
     });
+};
 
-}
+//Requete pour ajouter un menu à une carte.
+
+function ajouteMenu(idMenu){
+
+    //Recup de l'id de la carte en cours
+    var idCarteEnCours = $("#stockIDCarte").val();
+
+    //Verifie si une carte est bien selectionnee
+    if(idCarteEnCours !== ""){
+
+        $.ajax({
+            type: "GET",
+            url: "https://whispering-anchorage-52809.herokuapp.com/cartes/" + idCarteEnCours + "/add/" + idMenu,
+            async: false,
+            success: function () {
+                showMeACard(idCarteEnCours);
+            },
+            error: function () {
+                alert("Impossible d'ajouter ce menu à la carte");
+            }
+        });
+    }else{
+        alert("Aucune carte sélectionnée");
+    }
+};
+
 
 // requete pour afficher Tous les menus disponibles dans table du bas
 
@@ -164,10 +188,16 @@ function showAllMenus() {
             .append($("<td>").text(listeMenus[i].dessert.nom))
             .append($("<td>")
                     .append($("<button>")
-                            .addClass("btn btn-danger")
+                            .addClass("btn btn-danger btn-sm")
                             .attr("type", "button")
                             .text("Supprimer")
-                            .attr("onclick", "") //AJOUTER FONCTION
+                            .attr("onclick", "") //AJOUTER FCTION
+                            )
+                    .append($("<button>")
+                            .addClass("btn btn-success btn-sm")
+                            .attr("type", "button")
+                            .text("Ajouter à la carte")
+                            .attr("onclick", "ajouteMenu(" + listeMenus[i].id + ");")
                             )
                     )
             );
