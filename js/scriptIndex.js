@@ -5,7 +5,6 @@ $(document).ready(function () {
 });
 
 //VARIABLES
-var menuChoisi;
 var deleteMenuVar;
 
 // Récupérer la liste de cartes et l'afficher
@@ -82,6 +81,9 @@ function showMeACard(idCarte) {
         }
     });
 
+    //Mise en memoire de l'id de la carte selectionnee dans l'input stockIDCarte
+    $("#stockIDCarte").val(carteAAfficher.id);
+
     //Ajout du nom de la carte
     $("#nomCarteEdit").val(carteAAfficher.nom);
 
@@ -100,16 +102,39 @@ function showMeACard(idCarte) {
                     .append($("<td>").text(carteAAfficher.menu[i].nom))
                     .append($("<td>")
                             .append($("<button>")
-                                    .addClass("btn btn-danger")
+                                    .addClass("btn btn-danger btn-sm")
                                     .attr("type", "button")
-                                    .text("Supprimer")
-                                    .attr("onclick", "") //AJOUTER FONCTION
+                                    .text("Retirer")
+                                    .attr("onclick", "retireMenu(" + carteAAfficher.menu[i].id + ");")
                                     )
                             )
                     );
         }
     }
 };
+
+//Requete pour retirer un menu d'une carte. Cela ne supprime pas complètement le menu
+
+function retireMenu(idMenu){
+
+    //Recup de l'id de la carte en cours
+    var idCarteEnCours = $("#stockIDCarte").val();
+
+    console.log(idCarteEnCours);
+
+    $.ajax({
+        type: "GET",
+        url: "https://whispering-anchorage-52809.herokuapp.com/cartes/" + idCarteEnCours + "/remove/" + idMenu,
+        async: false,
+        success: function () {
+            showMeACard(idCarteEnCours);
+        },
+        error: function () {
+            alert("Impossible de retirer ce menu de la carte");
+        }
+    });
+
+}
 
 // requete pour afficher Tous les menus disponibles dans table du bas
 
