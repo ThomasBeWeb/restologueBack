@@ -1,7 +1,5 @@
 function checkLogin(){
     
-    console.log("Fonction active");
-    
     var testLogin = $("#username").val();
     var testPwd = $("#password").val();
     
@@ -10,7 +8,6 @@ function checkLogin(){
         password: testPwd
     };
         
-    console.log(testUser);
     $.ajax({
         type:"POST",
         url:"https://whispering-anchorage-52809.herokuapp.com/verify",

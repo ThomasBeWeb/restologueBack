@@ -1,10 +1,15 @@
 .gauche{
-    background-color: cadetblue;
+    background-color: white;
     color: black;
+    border: 2px solid red;
+    border-radius: 5px;
+    padding-top: 5px;
 }
 
 .droite{
-    background-color: bisque;
+    background-color: white;
+    border: 2px solid red;
+    border-radius: 5px;
 }
 
 .row{
@@ -13,4 +18,8 @@
 
 .hidden{
     display: none;
+}
+
+.ptitButton{
+    margin: 0px 2px;
 }
