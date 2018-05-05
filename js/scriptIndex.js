@@ -147,8 +147,6 @@ function ajouteMenu(idMenu) {
             async: false,
             success: function () {
                 showMeACard(idCarteEnCours);
-
-                console.log("toto");
             },
             error: function () {
                 alert("Impossible d'ajouter ce menu à la carte");
@@ -214,32 +212,99 @@ function showAllMenus() {
     }
 }
 
-//Affichage modal pour nouveau menu
+//Affichage modal pour nouveau menu OU modifier un menu existant
 function showMeTheMenu(idMenu) {
 
-    var menuSelected;
+    //Si idMenu = 0 => Creation d'un nouveau menu
+    if(idMenu === 0){
+        //modifictaion du titre du modal
+        $("#titredelAction").text("Ajouter un menu");
 
-    $.ajax({
-        type: "GET",
-        url: "https://whispering-anchorage-52809.herokuapp.com/menus/" + idMenu + "/get",
-        async: false,
-        success: function (data) {
-            menuSelected = data;
+        //RAZ des inputs
+        $("#titreMenu").val("");
+        $("#titreEntree").val("");
+        $("#prixEntree").val(0);
+        $("#titrePlat").val("");
+        $("#prixPlat").val(0);
+        $("#titreDessert").val("");
+        $("#prixDessert").val(0);
+
+        //Modif de l'action et du titre du bouton
+        $("#saveButtModal").text("Ajouter");
+        $("#saveButtModal").attr("onclick", "sauveMoiCeMenu(0);")
+
+    }else{ //Recup des infos du menu et affichage dans les imputs
+
+        $("#titredelAction").text("Modifier un menu");
+
+        var menuSelected;
+
+        $.ajax({
+            type: "GET",
+            url: "https://whispering-anchorage-52809.herokuapp.com/menus/" + idMenu + "/get",
+            async: false,
+            success: function (data) {
+                menuSelected = data;
+            },
+            error: function () {
+                alert("Erreur dans la récupération du menu");
+            }
+        });
+    
+        $("#titreMenu").val(menuSelected.nom);
+        $("#titreEntree").val(menuSelected.entree.nom);
+        $("#prixEntree").val(menuSelected.entree.prix);
+        $("#titrePlat").val(menuSelected.plat.nom);
+        $("#prixPlat").val(menuSelected.plat.prix);
+        $("#titreDessert").val(menuSelected.dessert.nom);
+        $("#prixDessert").val(menuSelected.dessert.prix);
+
+        //Modif de l'action et du titre du bouton
+        $("#saveButtModal").text("Modifier");
+        $("#saveButtModal").attr("onclick", "sauveMoiCeMenu(" + idMenu + ");")
+    }
+};
+
+//Sauvegarde d'un menu ajouté ou modifié
+function sauveMoiCeMenu(idMenu){
+
+    var menuToSave = {
+        id: idMenu,
+        nom: $("#titreMenu").val(),
+        entree: {
+            nom: $("#titreEntree").val(),
+            prix:  $("#prixEntree").val()
         },
-        error: function () {
-            alert("Erreur dans la récupération du menu");
+        plat: {
+            nom:  $("#titrePlat").val(),
+            prix:  $("#prixPlat").val()
+        },
+        dessert: {
+            nom: $("#titreDessert").val(),
+            prix: $("#prixDessert").val()
+        }
+    };
+
+
+       //Enregistrement du menu
+
+       $.ajax({
+        type:"POST",
+        url:"https://whispering-anchorage-52809.herokuapp.com/menus/add",
+        data: menuToSave,
+        async: false,
+        
+        success : function(data) {
+            //Reaffiche la liste des menus
+            showAllMenus();
+            //Clode la modal
+            $('#showMenu').modal('hide');
+        },
+        error : function(param1,param2) {
+            alert("erreur dans l'enregistrement du menu");
         }
     });
-
-    $("#titreMenu").val(menuSelected.nom);
-    $("#titreEntree").val(menuSelected.entree.nom);
-    $("#prixEntree").val(menuSelected.entree.prix);
-    $("#titrePlat").val(menuSelected.plat.nom);
-    $("#prixPlat").val(menuSelected.plat.prix);
-    $("#titreDessert").val(menuSelected.dessert.nom);
-    $("#prixDessert").val(menuSelected.dessert.prix);
-
-};
+}
 
 //Supression definitive d'un menu
 

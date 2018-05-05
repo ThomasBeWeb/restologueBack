@@ -35,7 +35,7 @@
 
             <!-- ZONE DE GAUCHE: CARTES -->
             <div class="col-3 gauche">
-                <h4>Cartes</h4>
+                <h4>Mes cartes</h4>
                 <br>
                 <!-- Zone d'ajout d'une carte -->
                 <div>
@@ -79,7 +79,7 @@
                     <div class="col-8">
                         <h4>Liste des menus</h4>
 
-                        <table class="table">
+                        <table class="table table-bordered table-sm">
                             <thead>
                                 <tr>
                                     <th scope="col">Menu</th>
@@ -91,10 +91,11 @@
                         </table>
                     </div>
                 </div>
-
+                <hr>
                 <!-- Zone affichage de tous les menus -->
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#showMenu" onclick="showMeTheMenu(0);">+ Ajouter Menu</button>
                 <div class="row listeMenus">
-                    <table class="table">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col">Suppr.</th>
@@ -118,7 +119,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modifier le menu</h5>
+                    <h5 class="modal-title" id="titredelAction">Modifier le menu</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -208,7 +209,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" id="saveButtModal">Save changes</button>
                 </div>
             </div>
         </div>
