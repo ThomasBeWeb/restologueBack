@@ -1,7 +1,6 @@
 $(document).ready(function () {
     showCartes();
     showAllMenus();
-
 });
 
 // Récupérer la liste de cartes et l'afficher
@@ -85,7 +84,9 @@ function showMeACard(idCarte) {
     //Ajout du nom de la carte
     $("#nomCarteEdit").val(carteAAfficher.nom);
 
-    //Modif de l'action du bouton supprimer
+    //Activation et modif de l'action du bouton supprimer
+    $("#modalSuppCarte").removeAttr('disabled');
+    $("#modalSuppCarte").attr("aria-disabled", false)
     $("#modalSuppCarte").attr("onclick", "deleteCarCheck(" + carteAAfficher.id + ");");
 
     //Affichage des menus dans le tableau si il y en a
@@ -111,8 +112,50 @@ function showMeACard(idCarte) {
     }
 };
 
-//Requete pour retirer un menu d'une carte. Cela ne supprime pas complètement le menu
+//Supprimer definitivement une carte => Modal de confirmation
+function deleteCarCheck(idCarte) {
 
+    //Recup du nom de la carte
+    $carteToDelete = $("#nomCarteEdit").val();
+
+    //affichage confirmation
+    $("#confirmDeleteCard").text("Etes vous sûr de vouloir supprimer la carte " + $carteToDelete + " ?");
+
+    //Modif de l'action du bouton Supprimer
+    $("#deleteCardButt").attr("onclick", "deleteCardForGood(" + idCarte + ");")
+};
+
+//Supprimer definitivement une carte => Action
+function deleteCardForGood(idCarte){
+
+    $.ajax({
+        type: "GET",
+        url: "https://whispering-anchorage-52809.herokuapp.com/cartes/" + idCarte + "/remove",
+        async: false,
+        success: function () {
+            //RAZ des infos carte et de sa liste de menus
+            $("#nomCarteEdit").val("");
+            $("#stockIDCarte").val(0);
+            $("#listeMenusCarte").empty();
+
+            //Affichage de la liste de carte mise à jour
+            showCartes();
+
+            //Bouton supprimer disabled
+            $("#modalSuppCarte").attr("aria-disabled", true)
+            $("#modalSuppCarte").prop("disabled", true);
+
+            //Fermeture de la modal
+            $('#deleteCard').modal('hide');
+        },
+        error: function () {
+            alert("Impossible de supprimer cette carte");
+        }
+    });
+
+}
+
+//Requete pour retirer un menu d'une carte. Cela ne supprime pas complètement le menu
 function retireMenu(idMenu) {
 
     //Recup de l'id de la carte en cours
@@ -132,7 +175,6 @@ function retireMenu(idMenu) {
 };
 
 //Requete pour ajouter un menu à une carte.
-
 function ajouteMenu(idMenu) {
 
     //Recup de l'id de la carte en cours
@@ -159,7 +201,6 @@ function ajouteMenu(idMenu) {
 
 
 // requete pour afficher Tous les menus disponibles dans table du bas
-
 function showAllMenus() {
 
     var listeMenus;
@@ -216,7 +257,7 @@ function showAllMenus() {
 function showMeTheMenu(idMenu) {
 
     //Si idMenu = 0 => Creation d'un nouveau menu
-    if(idMenu === 0){
+    if (idMenu === 0) {
         //modifictaion du titre du modal
         $("#titredelAction").text("Ajouter un menu");
 
@@ -233,7 +274,7 @@ function showMeTheMenu(idMenu) {
         $("#saveButtModal").text("Ajouter");
         $("#saveButtModal").attr("onclick", "sauveMoiCeMenu(0);")
 
-    }else{ //Recup des infos du menu et affichage dans les imputs
+    } else { //Recup des infos du menu et affichage dans les imputs
 
         $("#titredelAction").text("Modifier un menu");
 
@@ -250,7 +291,7 @@ function showMeTheMenu(idMenu) {
                 alert("Erreur dans la récupération du menu");
             }
         });
-    
+
         $("#titreMenu").val(menuSelected.nom);
         $("#titreEntree").val(menuSelected.entree.nom);
         $("#prixEntree").val(menuSelected.entree.prix);
@@ -265,19 +306,19 @@ function showMeTheMenu(idMenu) {
     }
 };
 
-//Sauvegarde d'un menu ajouté ou modifié
-function sauveMoiCeMenu(idMenu){
+//Sauvegarde à partir de la modal d'un menu ajouté ou modifié
+function sauveMoiCeMenu(idMenu) {
 
     var menuToSave = {
         id: idMenu,
         nom: $("#titreMenu").val(),
         entree: {
             nom: $("#titreEntree").val(),
-            prix:  $("#prixEntree").val()
+            prix: $("#prixEntree").val()
         },
         plat: {
-            nom:  $("#titrePlat").val(),
-            prix:  $("#prixPlat").val()
+            nom: $("#titrePlat").val(),
+            prix: $("#prixPlat").val()
         },
         dessert: {
             nom: $("#titreDessert").val(),
@@ -286,48 +327,82 @@ function sauveMoiCeMenu(idMenu){
     };
 
 
-       //Enregistrement du menu
+    //Enregistrement du menu
 
-       $.ajax({
-        type:"POST",
-        url:"https://whispering-anchorage-52809.herokuapp.com/menus/add",
+    $.ajax({
+        type: "POST",
+        url: "https://whispering-anchorage-52809.herokuapp.com/menus/add",
         data: menuToSave,
         async: false,
-        
-        success : function(data) {
+
+        success: function (data) {
             //Reaffiche la liste des menus
             showAllMenus();
             //Clode la modal
             $('#showMenu').modal('hide');
         },
-        error : function(param1,param2) {
+        error: function (param1, param2) {
             alert("erreur dans l'enregistrement du menu");
         }
     });
-}
+
+    //Verif si ce menu est présent dans la carte affichée, si oui relance de l'affichage de tous les menus de cette carte
+    var testMenu = checkMyMenu(idMenu);
+    if(testMenu === true){
+        var idCarteEnCours = $("#stockIDCarte").val();
+        showMeACard(idCarteEnCours);
+    };
+        
+};
 
 //Supression definitive d'un menu
 
 function deleteMenu(idMenu) {
+
+    //Avant de le supprimer, verif si carte en cours contenait ce menu
+    var testMenuDeleted = checkMyMenu(idMenu);
 
     $.ajax({
         type: "GET",
         url: "https://whispering-anchorage-52809.herokuapp.com/menus/" + idMenu + "/remove",
         async: false,
         success: function () {
-            //Si carte chargée dans infos carte, reload au cas où elle contenanit ce menu
-            if ($("#stockIDCarte").val() !== "") {
-                idCarte = $("#stockIDCarte").val();
-                showMeACard(idCarte);
-            }
-
             //Reload de la liste des menus disponibles
             showAllMenus();
-
         },
         error: function () {
             alert("Erreur dans la récupération du menu");
         }
     });
-}
+
+    //Si carte en cours contenait ce menu, reload de la carte
+    console.log(testMenuDeleted);
+    if(testMenuDeleted === true){
+        var idCarteEnCours = $("#stockIDCarte").val();
+        showMeACard(idCarteEnCours);
+    };
+};
+
+//Fonction qui checke si un menu est present dans la carte en cours, retourne un boolean
+function checkMyMenu(idMenuToCheck){
+
+    //Recup de l'id de la carte en cours
+    var idCarteEnCours = $("#stockIDCarte").val();
+
+    var reponse = false;
+    
+    $.ajax({
+        type: "GET",
+        url: "https://whispering-anchorage-52809.herokuapp.com/cartes/" + idCarteEnCours + "/check/" + idMenuToCheck,
+        async: false,
+        success: function (data) {
+            reponse = data;
+        },
+        error: function () {
+            alert("Erreur dans la recherche d'informations");
+        }
+    });
+
+    return reponse;
+};
 

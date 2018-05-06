@@ -70,7 +70,7 @@
                         </div>
                         <br>
                         <h5>Supprimer définitivement la carte</h5>
-                        <button type="button" class="btn btn-outline-danger btn-sm">Supprimer</button>
+                        <button type="button" id="modalSuppCarte" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#deleteCard" aria-disabled="true" disabled>Supprimer</button>
                         <!-- Input invisible stockant l'id de la carte -->
                         <input type="text" id="stockIDCarte" class="hidden" value="">
                     </div>
@@ -222,13 +222,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="titredelAction">SUpprimer</h5>
+                    <h5 class="modal-title" id="titredelAction">Supprimer</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h4>Etes vous sûr de vouloir supprimer?</h4>
+                    <h5 id="confirmDeleteCard">...</h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
