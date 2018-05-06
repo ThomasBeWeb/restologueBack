@@ -92,8 +92,11 @@
                     </div>
                 </div>
                 <hr>
+                <!-- Ajouter Menu-->
+                <div class="row">
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#showMenu" onclick="showMeTheMenu(0);">+ Créer Menu</button>
+                </div>
                 <!-- Zone affichage de tous les menus -->
-                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#showMenu" onclick="showMeTheMenu(0);">+ Ajouter Menu</button>
                 <div class="row listeMenus">
                     <table class="table table-bordered">
                         <thead>
@@ -210,6 +213,26 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="saveButtModal">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Sûr de supprimer carte-->
+    <div class="modal fade" id="deleteCard" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titredelAction">SUpprimer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4>Etes vous sûr de vouloir supprimer?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="deleteCardButt">Supprimer</button>
                 </div>
             </div>
         </div>

@@ -86,7 +86,7 @@ function showMeACard(idCarte) {
     $("#nomCarteEdit").val(carteAAfficher.nom);
 
     //Modif de l'action du bouton supprimer
-    $("#modalSuppCarte").attr("onclick", "deleteCarte(" + carteAAfficher.id + ");");
+    $("#modalSuppCarte").attr("onclick", "deleteCarCheck(" + carteAAfficher.id + ");");
 
     //Affichage des menus dans le tableau si il y en a
 
